@@ -43,22 +43,17 @@ loc_B = (1, 0)
 """We change the simpleReflexAgentProgram so that it doesn't make use of the Rule class"""
 
 
-def SimpleReflexAgentProgram(): #没用了，简单反射的函数我卸载agent，调用model即可
+def SimpleReflexAgentProgram(): #没用了，简单反射的函数我写在agent，调用model即可
     """This agent takes action based solely on the percept. [Figure 2.10]"""
 
     def program(percept):
         loc, status = percept
-
-        # if status == 'Dirty':
-        #     action = 'Suck'
-        # elif loc == loc_A:
-        #     action = 'Right'
-        # elif loc == loc_B:
-        #     action = 'Left'
-        # else:
-        #     action = 'NoOp'  # 默认情况下不采取任何动作
-        #
-        # return action
+        if status == 'Dirty':
+            return 'Suck'
+        elif loc == loc_A:
+            return 'Right'
+        else:
+            return 'Left'
 
     return program
 
@@ -69,17 +64,17 @@ simple_reflex_agent = Agent(program)
 
 # In[17]:
 
-# Create a table-driven agent
+# Create a model-driven agent
 simple_reflex_agent = Agent(program=ModelBasedVacuumAgent())
 
 trivial_vacuum_env.add_thing(simple_reflex_agent)
 
-print("SimpleReflexVacuumAgent is located at {}.".format(simple_reflex_agent.location))
+print("ModelDrivenVacuumAgent is located at {}.".format(simple_reflex_agent.location))
 
 for time_step in range(3):  # 执行三个时间步
     trivial_vacuum_env.step()
     print("Time Step: {}".format(time_step + 1))
-    print("SimpleReflexVacuumAgent is located at {}.".format(simple_reflex_agent.location))
+    print("ModelDrivenVacuumAgent is located at {}.".format(simple_reflex_agent.location))
     print("State of the Environment: {}.".format(trivial_vacuum_env.status))
 trivial_vacuum_env.delete_thing(simple_reflex_agent)
 # In[22]:
@@ -104,8 +99,6 @@ table = {((loc_A, 'Clean'),): 'Right',
 table_driven_agent = Agent(program=TableDrivenVacuumAgent(table=table))
 
 # In[25]:
-
-
 # Add the table-driven agent to the environment
 trivial_vacuum_env.add_thing(table_driven_agent)
 
